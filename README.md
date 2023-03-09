@@ -1,5 +1,7 @@
 # XTouch Mini Python Library
 
+Kenn Garroch March 2023
+
 This simple library creates a class that represents the Behringer XTouch Mini 
 USB midi controller in Python.
 
