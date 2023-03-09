@@ -83,7 +83,7 @@ class knob:
         self.value=0
         self.button=0     
         self.latch=0
-        self.led(0)
+        self.led()
 
     def led(self,onOff=None,seg=None):
         """ 
@@ -145,13 +145,13 @@ class knob:
                     if self.value>self.rotmax:
                         self.value=self.rotmax
         self.led()
-        self.rotCallback(m)
-        self.buttonCallback(m)
+        self.rotcallback(m)
+        self.buttoncallback(m)
 
-    def rotCallback(self,m):
+    def rotcallback(self,m):
         """ Replace this to add a callback on rotation changes """
         pass
-    def buttonCallback(self,m):
+    def buttoncallback(self,m):
         """ Replace this to add a callback on button change """
         pass
 
@@ -195,9 +195,9 @@ class button:
             raise
 
     def reset(self):
-        self.led(0)
         self.button=0
         self.latch=0
+        self.led()
 
 
     def setLED(self,n=0):
@@ -280,17 +280,17 @@ class xTouch:
             self.knobs[k].name="K{0}".format(k)
         self.slider=slider(self)
         self.slider.name="Slider"
-        #self.midiOut.panic()
-        #self.showState()
+        self.reset()
+
     def __del__(self):
         self.midiIn.close()
         self.midiOut.close()
 
     def reset(self):
         """ Set all buttons and knobs to off """
-        for r in self.knobs:
-            r.reset()
         for r in self.buttons:
+            r.reset()
+        for r in self.knobs:
             r.reset()
 
 
@@ -310,13 +310,13 @@ class xTouch:
         print("Slider: {0}".format(self.slider.value))
     
     def midiCallback(self,m):
-        # Improve this via lookup for the actual button of knob
+        # Improve this via lookup for the actual object?
+        self.message=m
         for b in self.buttons:
             b.midi(m)
         for k in self.knobs:
             k.midi(m)
         self.slider.midi(m)
-        self.message=m
         if self.console==1:
             self.showState()
 
@@ -349,6 +349,7 @@ if __name__=="__main__":
             print("="*x.knobs[0].value)
 
         if x.buttons[13].button==1:
+            x.reset()
             sys.exit(0)
 
         if x.buttons[16].latch==1:
