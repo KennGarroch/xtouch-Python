@@ -270,7 +270,16 @@ class xTouch:
     console  = 1 # Set to 0 to stop control display
 
     def __init__(self):
-        self.midiIn=mido.open_input(MIDIDEVICE,callback=self.midiCallback)
+        print("Setting up Midi - please wait")
+        try:
+            self.midiIn=mido.open_input(MIDIDEVICE,callback=self.midiCallback)
+        except:
+            print("Unknown MIDI device - use a name from list. Check connections")
+            m=mido.get_input_names()
+            for n in m:
+                print(n)
+            print("Stopped.")
+            sys.exit(0)
         self.midiOut=mido.open_output(MIDIDEVICE)
         for b in range(0,18):
             self.buttons.append(button(self,b))
@@ -283,8 +292,11 @@ class xTouch:
         self.reset()
 
     def __del__(self):
-        self.midiIn.close()
-        self.midiOut.close()
+        try:
+            self.midiIn.close()
+            self.midiOut.close()
+        except:
+            pass
 
     def reset(self):
         """ Set all buttons and knobs to off """
@@ -324,8 +336,8 @@ if __name__=="__main__":
     # Create the xTouch Object and show some of the features
 
     os.system("clear")
-    print("Press button A to show console")
     x=xTouch()  # Create object
+    print("Press button A to show console")
     x.console=0 # Turn the console displ;y off
     x.knobs[0].rotmax=60
     # Create a test callback function as demo
