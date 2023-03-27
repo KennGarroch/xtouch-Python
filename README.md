@@ -16,13 +16,26 @@ the complete system.
 
 Pre-requisites are the [Mido](https://mido.readthedocs.io/en/latest/index.html) 
 project and the RtMidi backend. Download and install with pip3 mido. The RtMidi 
-backend may also need to be installed with [python-rtmidi](https://github.com/SpotlightKid/python-rtmidi)
+backend will also need to be installed with [python-rtmidi](https://github.com/SpotlightKid/python-rtmidi)
 
 ## Quick test
 
 Once installed, plug the XTouch into the USB and run:
 
 python3 xtouch.py
+
+from the command line (Terminal). If the Midi name is not simply X-TOUCH MINI 
+then all attached controllers will be listed. If the X-Touch is in the list 
+then copy the full name and paste it into the string at the top of the xtouch.py 
+If the device is not there then check the connections.
+
+As an example, the system on a Mac uses:
+
+ `MIDIDEVICE="X-TOUCH MINI"`
+
+whereas on a Raspberry Pi it is:
+
+ `MIDIDEVICE="X-TOUCH MINI:X-TOUCH MINI 1 24:0"`
 
 The demo code should be easy to follow. Press A (upper far right on XTouch) to
 see the status of all the buttons and knobs. Press a few buttons and twist some
